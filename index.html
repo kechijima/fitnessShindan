@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#2A6049" />
+  <title>あなたの暮らしDNA診断</title>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/versions/2.22.3/sdk.js"></script>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --primary: #2A6049;
+      --primary-mid: #3A7860;
+      --primary-light: #4E9E82;
+      --accent: #C97A4A;
+      --accent-light: #E09060;
+      --bg: #F7F4EF;
+      --bg-card: #FFFFFF;
+      --text: #1C1C1C;
+      --text-mid: #555555;
+      --text-light: #888888;
+      --border: #E4DDD3;
+      --shadow-sm: 0 2px 12px rgba(42, 96, 73, 0.10);
+      --shadow-md: 0 6px 28px rgba(42, 96, 73, 0.15);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 28px;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans',
+        'Noto Sans JP', Meiryo, 'Yu Gothic UI', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ===== SCREEN SYSTEM ===== */
+    .screen {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+
+    .screen.active {
+      display: flex;
+      animation: screenIn 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    @keyframes screenIn {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ===== INTRO SCREEN ===== */
+    #screen-intro {
+      background: linear-gradient(160deg, #F0EDE6 0%, #E8F0EC 100%);
+    }
+
+    .intro-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 48px 28px 40px;
+      text-align: center;
+    }
+
+    .intro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(42, 96, 73, 0.12);
+      color: var(--primary);
+      border: 1.5px solid rgba(42, 96, 73, 0.25);
+      padding: 7px 18px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 28px;
+    }
+
+    .intro-house {
+      font-size: 80px;
+      line-height: 1;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 8px 24px rgba(42, 96, 73, 0.18));
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    .intro-title {
+      font-size: 30px;
+      font-weight: 900;
+      line-height: 1.25;
+      color: var(--primary);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .intro-title span {
+      color: var(--accent);
+    }
+
+    .intro-lead {
+      font-size: 15px;
+      color: var(--text-mid);
+      line-height: 1.8;
+      margin-bottom: 32px;
+      max-width: 300px;
+    }
+
+    .intro-cards {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      max-width: 360px;
+      margin-bottom: 36px;
+    }
+
+    .intro-card {
+      flex: 1;
+      background: var(--bg-card);
+      border-radius: var(--radius-sm);
+      padding: 16px 8px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .intro-card-icon {
+      font-size: 26px;
+    }
+
+    .intro-card-text {
+      font-size: 11px;
+      color: var(--text-mid);
+      line-height: 1.4;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 320px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-mid) 100%);
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(42, 96, 73, 0.38);
+      transition: transform 0.15s, box-shadow 0.15s;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.96);
+      box-shadow: 0 4px 14px rgba(42, 96, 73, 0.3);
+    }
+
+    .intro-note {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-light);
+    }
+
+    /* ===== QUESTION SCREENS ===== */
+    .q-screen {
+      padding: 0 20px;
+    }
+
+    .q-header {
+      padding: 20px 0 16px;
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .q-progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .q-progress-label {
+      font-size: 13px;
+      color: var(--text-mid);
+      font-weight: 600;
+    }
+
+    .q-progress-count {
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--primary-light));
+      border-radius: 3px;
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .q-body {
+      flex: 1;
+      padding: 8px 0 24px;
+    }
+
+    .q-category {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .q-text {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.45;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .q-sub {
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .opt {
+      background: var(--bg-card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.2s, background 0.2s, transform 0.15s;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    .opt:active {
+      transform: scale(0.98);
+    }
+
+    .opt.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(42, 96, 73, 0.07) 0%, rgba(78, 158, 130, 0.04) 100%);
+    }
+
+    .opt-letter {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text-light);
+      flex-shrink: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .opt.selected .opt-letter {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .opt-text {
+      flex: 1;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .opt-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, border-color 0.2s;
+    }
+
+    .opt.selected .opt-check {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .opt-check svg {
+      display: none;
+    }
+
+    .opt.selected .opt-check svg {
+      display: block;
+    }
+
+    .q-footer {
+      padding: 12px 0 36px;
+    }
+
+    .btn-next {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-mid));
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      opacity: 0.3;
+      pointer-events: none;
+      transition: opacity 0.3s, box-shadow 0.3s, transform 0.15s;
+      letter-spacing: 0.04em;
+    }
+
+    .btn-next.ready {
+      opacity: 1;
+      pointer-events: auto;
+      box-shadow: 0 10px 28px rgba(42, 96, 73, 0.36);
+    }
+
+    .btn-next.ready:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 14px rgba(42, 96, 73, 0.28);
+    }
+
+    /* ===== LOADING SCREEN ===== */
+    #screen-loading {
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #EEF4F1 0%, #F7F4EF 100%);
+    }
+
+    .loading-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .dna-loader {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 36px;
+    }
+
+    .dna-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      animation: spin 1.4s linear infinite;
+    }
+
+    .dna-ring:nth-child(1) {
+      border-top-color: var(--primary);
+      animation-duration: 1.4s;
+    }
+
+    .dna-ring:nth-child(2) {
+      inset: 12px;
+      border-top-color: var(--accent);
+      animation-duration: 1.0s;
+      animation-direction: reverse;
+    }
+
+    .dna-ring:nth-child(3) {
+      inset: 24px;
+      border-top-color: var(--primary-light);
+      animation-duration: 0.7s;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .loading-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .loading-sub {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: dotBounce 1.4s ease-in-out infinite;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes dotBounce {
+
+      0%,
+      60%,
+      100% {
+        transform: translateY(0);
+        opacity: 0.35;
+      }
+
+      30% {
+        transform: translateY(-12px);
+        opacity: 1;
+      }
+    }
+
+    /* ===== RESULT SCREEN ===== */
+    #screen-result {
+      background: var(--bg);
+    }
+
+    .result-top {
+      background: linear-gradient(160deg, var(--primary) 0%, var(--primary-mid) 100%);
+      padding: 52px 28px 40px;
+      text-align: center;
+      color: #fff;
+      border-radius: 0 0 40px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .result-top::before {
+      content: '';
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .result-top::after {
+      content: '';
+      position: absolute;
+      bottom: -30px;
+      left: -30px;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .result-badge-label {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 100px;
+      padding: 5px 16px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      margin-bottom: 20px;
+    }
+
+    .result-emoji {
+      font-size: 72px;
+      line-height: 1;
+      margin-bottom: 14px;
+      display: block;
+      animation: popIn 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s both;
+    }
+
+    @keyframes popIn {
+      from {
+        transform: scale(0.4);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .result-label-sm {
+      font-size: 14px;
+      opacity: 0.82;
+      margin-bottom: 6px;
+    }
+
+    .result-type {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+    }
+
+    .result-body {
+      padding: 28px 20px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .result-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 24px 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .result-card-ttl {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .result-desc {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text);
+    }
+
+    .result-suggest-box {
+      margin-top: 16px;
+      background: linear-gradient(135deg, rgba(42, 96, 73, 0.07), rgba(78, 158, 130, 0.04));
+      border-radius: var(--radius-sm);
+      padding: 16px 18px;
+    }
+
+    .result-suggest-lbl {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+    }
+
+    .result-suggest-txt {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .contact-card {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+      border-radius: var(--radius-md);
+      padding: 26px 22px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .contact-card-icon {
+      font-size: 38px;
+      margin-bottom: 12px;
+    }
+
+    .contact-card-ttl {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .contact-card-txt {
+      font-size: 14px;
+      line-height: 1.7;
+      opacity: 0.92;
+    }
+
+    .summary-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-md);
+      padding: 20px 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .summary-ttl {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-light);
+      margin-bottom: 14px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-row:last-child {
+      border-bottom: none;
+    }
+
+    .summary-q {
+      font-size: 12px;
+      color: var(--text-light);
+      flex-shrink: 0;
+      padding-top: 1px;
+    }
+
+    .summary-a {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    .result-footer-note {
+      font-size: 12px;
+      color: var(--text-light);
+      text-align: center;
+      line-height: 1.8;
+      padding: 0 4px 8px;
+    }
+
+    /* ===== ERROR SCREEN ===== */
+    #screen-error {
+      align-items: center;
+      justify-content: center;
+    }
+
+    .error-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 28px;
+      text-align: center;
+    }
+
+    .error-icon {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    .error-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .error-msg {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==================== INTRO ==================== -->
+  <div id="screen-intro" class="screen">
+    <div class="intro-wrap">
+      <div class="intro-badge">🧬 無料・約1分で完了</div>
+      <div class="intro-house">🏠</div>
+      <h1 class="intro-title">あなたの<br>暮らし<span>DNA</span>診断</h1>
+      <p class="intro-lead">4つの質問に答えるだけで、<br>あなた本来の住まいへの<br>価値観がわかります。</p>
+      <div class="intro-cards">
+        <div class="intro-card">
+          <div class="intro-card-icon">⏱</div>
+          <div class="intro-card-text">約1分<br>で完了</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-icon">🔍</div>
+          <div class="intro-card-text">4タイプ<br>から診断</div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-card-icon">💬</div>
+          <div class="intro-card-text">専任担当<br>がご提案</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="startDiagnosis()">
+        診断をはじめる &#x2192;
+      </button>
+      <p class="intro-note">全4問・無料・個人情報入力不要</p>
+    </div>
+  </div>
+
+  <!-- ==================== Q1 ==================== -->
+  <div id="screen-q1" class="screen q-screen">
+    <div class="q-header">
+      <div class="q-progress-row">
+        <span class="q-progress-label">質問</span>
+        <span class="q-progress-count">1 / 4</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" style="width:25%"></div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-category">Q1 &middot; 住まいへの気持ち</div>
+      <h2 class="q-text">あなたの「今の住まい」に対する気持ちは？</h2>
+      <p class="q-sub">今の暮らしについて、最も近いものを選んでください</p>
+      <div class="options-list">
+        <div class="opt" onclick="selectOpt('q1','A',this)">
+          <div class="opt-letter">A</div>
+          <div class="opt-text">今の住まいに少し不満がある</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q1','B',this)">
+          <div class="opt-letter">B</div>
+          <div class="opt-text">もっと広い・新しい家に住みたい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q1','C',this)">
+          <div class="opt-letter">C</div>
+          <div class="opt-text">今は満足しているが将来が不安</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q1','D',this)">
+          <div class="opt-letter">D</div>
+          <div class="opt-text">住まいを一から理想通りに作りたい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-footer">
+      <button class="btn-next" id="btn-q1" onclick="goTo('q2')">次の質問へ &#x2192;</button>
+    </div>
+  </div>
+
+  <!-- ==================== Q2 ==================== -->
+  <div id="screen-q2" class="screen q-screen">
+    <div class="q-header">
+      <div class="q-progress-row">
+        <span class="q-progress-label">質問</span>
+        <span class="q-progress-count">2 / 4</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" style="width:50%"></div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-category">Q2 &middot; 理想のライフスタイル</div>
+      <h2 class="q-text">休日の理想の「家での過ごし方」は？</h2>
+      <p class="q-sub">あなたの理想のリラックス空間をイメージしてください</p>
+      <div class="options-list">
+        <div class="opt" onclick="selectOpt('q2','A',this)">
+          <div class="opt-letter">A</div>
+          <div class="opt-text">家族みんなでゆったりリビングで過ごしたい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q2','B',this)">
+          <div class="opt-letter">B</div>
+          <div class="opt-text">自分だけの趣味部屋でこもりたい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q2','C',this)">
+          <div class="opt-letter">C</div>
+          <div class="opt-text">庭やテラスで外の空気を感じたい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q2','D',this)">
+          <div class="opt-letter">D</div>
+          <div class="opt-text">広いキッチンで料理や食を楽しみたい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-footer">
+      <button class="btn-next" id="btn-q2" onclick="goTo('q3')">次の質問へ &#x2192;</button>
+    </div>
+  </div>
+
+  <!-- ==================== Q3 ==================== -->
+  <div id="screen-q3" class="screen q-screen">
+    <div class="q-header">
+      <div class="q-progress-row">
+        <span class="q-progress-label">質問</span>
+        <span class="q-progress-count">3 / 4</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" style="width:75%"></div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-category">Q3 &middot; 大切にしたい価値観</div>
+      <h2 class="q-text">家づくりで一番大切にしたいことは？</h2>
+      <p class="q-sub">あなたの家づくりの最優先事項を教えてください</p>
+      <div class="options-list">
+        <div class="opt" onclick="selectOpt('q3','A',this)">
+          <div class="opt-letter">A</div>
+          <div class="opt-text">デザイン・見た目のおしゃれさ</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q3','B',this)">
+          <div class="opt-letter">B</div>
+          <div class="opt-text">家族の安心・安全・暮らしやすさ</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q3','C',this)">
+          <div class="opt-letter">C</div>
+          <div class="opt-text">費用を抑えてコスパよく</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q3','D',this)">
+          <div class="opt-letter">D</div>
+          <div class="opt-text">長く使える質とブランド</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-footer">
+      <button class="btn-next" id="btn-q3" onclick="goTo('q4')">次の質問へ &#x2192;</button>
+    </div>
+  </div>
+
+  <!-- ==================== Q4 ==================== -->
+  <div id="screen-q4" class="screen q-screen">
+    <div class="q-header">
+      <div class="q-progress-row">
+        <span class="q-progress-label">質問</span>
+        <span class="q-progress-count">4 / 4</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" style="width:100%"></div>
+      </div>
+    </div>
+    <div class="q-body">
+      <div class="q-category">Q4 &middot; 検討フェーズ</div>
+      <h2 class="q-text">家のことについて、今どのくらい考えていますか？</h2>
+      <p class="q-sub">現在の検討状況を正直に教えてください</p>
+      <div class="options-list">
+        <div class="opt" onclick="selectOpt('q4','A',this)">
+          <div class="opt-letter">A</div>
+          <div class="opt-text">今すぐでも相談したい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q4','B',this)">
+          <div class="opt-letter">B</div>
+          <div class="opt-text">1〜2年以内には動きたい</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q4','C',this)">
+          <div class="opt-letter">C</div>
+          <div class="opt-text">いつかは…と漠然と考えている</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+        <div class="opt" onclick="selectOpt('q4','D',this)">
+          <div class="opt-letter">D</div>
+          <div class="opt-text">まだ考えていないが興味はある</div>
+          <div class="opt-check"><svg width="13" height="11" viewBox="0 0 13 11" fill="none">
+              <path d="M1.5 5.5L5 9L11.5 1.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg></div>
+        </div>
+      </div>
+    </div>
+    <div class="q-footer">
+      <button class="btn-next" id="btn-q4" onclick="submitDiagnosis()">診断結果を見る ✨</button>
+    </div>
+  </div>
+
+  <!-- ==================== LOADING ==================== -->
+  <div id="screen-loading" class="screen">
+    <div class="loading-wrap">
+      <div class="dna-loader">
+        <div class="dna-ring"></div>
+        <div class="dna-ring"></div>
+        <div class="dna-ring"></div>
+      </div>
+      <h2 class="loading-title">あなたの暮らしDNAを<br>分析中です…</h2>
+      <p class="loading-sub">回答を解析して<br>あなたの住まいタイプを判定しています</p>
+      <div class="dots">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESULT ==================== -->
+  <div id="screen-result" class="screen">
+    <div class="result-top">
+      <div class="result-badge-label">🧬 診断結果</div>
+      <span class="result-emoji" id="res-icon"></span>
+      <p class="result-label-sm">あなたは</p>
+      <h1 class="result-type" id="res-name"></h1>
+    </div>
+    <div class="result-body">
+      <div class="result-card">
+        <div class="result-card-ttl">📋 あなたについて</div>
+        <p class="result-desc" id="res-desc"></p>
+        <div class="result-suggest-box">
+          <div class="result-suggest-lbl">🏠 おすすめの住まいづくり</div>
+          <div class="result-suggest-txt" id="res-suggest"></div>
+        </div>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-card-icon">💌</div>
+        <h3 class="contact-card-ttl">担当よりご連絡いたします</h3>
+        <p class="contact-card-txt">専任スタッフが、あなたの理想に合わせた住まいづくりのご提案をさせていただきます。今しばらくお待ちください。<br><br>※
+          お急ぎの方はこのLINEにメッセージをお送りください。</p>
+      </div>
+
+      <div class="summary-card" id="res-summary">
+        <!-- JS で生成 -->
+      </div>
+
+      <p class="result-footer-note">担当スタッフよりLINEにてご連絡いたします。<br>プライバシーポリシーに基づき、適切に管理いたします。</p>
+    </div>
+  </div>
+
+  <!-- ==================== ERROR ==================== -->
+  <div id="screen-error" class="screen">
+    <div class="error-wrap">
+      <div class="error-icon">😢</div>
+      <h2 class="error-title">エラーが発生しました</h2>
+      <p class="error-msg" id="err-msg">予期しないエラーが発生しました。<br>LINEアプリから再度お試しください。</p>
+    </div>
+  </div>
+
+  <script>
+    /* =====================================================
+       設定 — デプロイ時に書き換えてください
+       ===================================================== */
+    var CONFIG = {
+      LIFF_ID: '2005378903-zSLt4AzC',           // LIFFチャネル設定画面で取得したID
+      GAS_URL: 'https://script.google.com/macros/s/AKfycbxB8f_BJDUfNvCRRJlaIuTZdTH6W6MTiAhfCCSIq2XqqvFjpG6MInH5vz9y3COjAozMdA/exec'      // GASをWebアプリとして公開したURL
+    };
+
+    /* =====================================================
+       定数 — 質問・選択肢・タイプデータ
+       ===================================================== */
+    var QUESTIONS = {
+      q1: {
+        label: '住まいへの気持ち',
+        opts: {
+          A: '今の住まいに少し不満がある',
+          B: 'もっと広い・新しい家に住みたい',
+          C: '今は満足しているが将来が不安',
+          D: '住まいを一から理想通りに作りたい'
+        }
+      },
+      q2: {
+        label: '理想の過ごし方',
+        opts: {
+          A: '家族みんなでゆったりリビングで',
+          B: '自分だけの趣味部屋でこもりたい',
+          C: '庭やテラスで外の空気を感じたい',
+          D: '広いキッチンで料理を楽しみたい'
+        }
+      },
+      q3: {
+        label: '大切にしたいこと',
+        opts: {
+          A: 'デザイン・見た目のおしゃれさ',
+          B: '家族の安心・安全・暮らしやすさ',
+          C: '費用を抑えてコスパよく',
+          D: '長く使える質とブランド'
+        }
+      },
+      q4: {
+        label: '検討フェーズ',
+        opts: {
+          A: '今すぐでも相談したい',
+          B: '1〜2年以内には動きたい',
+          C: 'いつかは…と漠然と考えている',
+          D: 'まだ考えていないが興味はある'
+        }
+      }
+    };
+
+    // タイプ定義
+    var TYPES = {
+      1: {
+        name: '「安らぎ重視」タイプ',
+        icon: '🏡',
+        desc: '家族との時間を何より大切にする、居心地最優先派。あなたにとって「家」とは、一日の疲れを癒し、笑顔が生まれる温かな場所。開放的なリビングに家族が自然と集まる暮らしを理想としています。',
+        suggest: 'LDKの大規模リフォーム・バリアフリー設計・家族が集まれる間取りのご提案が最適です。'
+      },
+      2: {
+        name: '「理想追求」タイプ',
+        icon: '✨',
+        desc: 'こだわりを持ち、自分らしい空間を強く求めるタイプ。細部の仕上げから素材の選定まで妥協しない感性の持ち主。住まいは自己表現の場であり、本質的な「居場所」を追い求めています。',
+        suggest: 'フルリフォームや注文住宅で、理想を細部まで反映した住まいづくりが最適です。'
+      },
+      3: {
+        name: '「堅実計画」タイプ',
+        icon: '🔑',
+        desc: 'コストと品質のバランスを大切にする現実派。感情だけで動かず、長期的な視点でしっかりと計画を立てます。賢い選択と補助金の活用で、質の高い暮らしを実現する実践力があります。',
+        suggest: '部分リフォーム・補助金活用プランで、コストパフォーマンスを最大化する住まいづくりが最適です。'
+      },
+      4: {
+        name: '「未来設計」タイプ',
+        icon: '🌱',
+        desc: 'ライフステージの変化を見据えて動く先進派。将来を明確にイメージし、今から準備を進める行動力があります。子育て期から老後まで、変化する暮らしに対応できる住まいを求めています。',
+        suggest: '新築・土地探し・資金計画から始める、未来を見据えた長期的な住まいづくりが最適です。'
+      }
+    };
+
+    // スコアリングマトリクス — 各回答が [T1, T2, T3, T4] に加算するスコア
+    var SCORES = {
+      q1: { A: [2, 1, 2, 0], B: [0, 2, 0, 3], C: [1, 0, 0, 2], D: [0, 3, 0, 1] },
+      q2: { A: [3, 0, 0, 1], B: [0, 3, 0, 0], C: [0, 1, 0, 2], D: [1, 0, 3, 0] },
+      q3: { A: [0, 3, 0, 1], B: [3, 0, 1, 0], C: [0, 0, 3, 0], D: [1, 1, 1, 3] },
+      q4: { A: [0, 2, 0, 1], B: [0, 1, 1, 2], C: [2, 0, 2, 0], D: [1, 0, 1, 0] }
+    };
+
+    /* =====================================================
+       状態
+       ===================================================== */
+    var answers = {};
+    var userProfile = { userId: '', displayName: 'ゲスト' };
+
+    /* =====================================================
+       LIFF 初期化
+       ===================================================== */
+    async function initApp() {
+      try {
+        await liff.init({ liffId: CONFIG.LIFF_ID });
+
+        if (liff.isLoggedIn()) {
+          var profile = await liff.getProfile();
+          userProfile.userId = profile.userId;
+          userProfile.displayName = profile.displayName;
+        } else if (!liff.isInClient()) {
+          // ブラウザ確認用（本番ではLINEクライアント内のみ）
+          userProfile.userId = 'browser_' + Date.now();
+          userProfile.displayName = 'テストユーザー';
+        } else {
+          liff.login();
+          return;
+        }
+      } catch (e) {
+        console.warn('LIFF init warning:', e);
+        // LIFF ID未設定の場合もデモとして続行
+        userProfile.userId = 'demo_' + Date.now();
+        userProfile.displayName = 'デモユーザー';
+      }
+      showScreen('intro');
+    }
+
+    /* =====================================================
+       画面制御
+       ===================================================== */
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(function (s) {
+        s.classList.remove('active');
+      });
+      var el = document.getElementById('screen-' + id);
+      if (el) el.classList.add('active');
+      window.scrollTo(0, 0);
+    }
+
+    /* =====================================================
+       診断スタート
+       ===================================================== */
+    function startDiagnosis() {
+      answers = {};
+      showScreen('q1');
+    }
+
+    /* =====================================================
+       選択肢クリック
+       ===================================================== */
+    function selectOpt(qid, answer, el) {
+      // 同じ設問の選択を解除
+      el.closest('.options-list').querySelectorAll('.opt').forEach(function (o) {
+        o.classList.remove('selected');
+      });
+      el.classList.add('selected');
+      answers[qid] = answer;
+
+      // 次へボタン有効化
+      var btn = document.getElementById('btn-' + qid);
+      if (btn) btn.classList.add('ready');
+    }
+
+    /* =====================================================
+       画面遷移（Q → Q）
+       ===================================================== */
+    function goTo(screenId) {
+      showScreen(screenId);
+    }
+
+    /* =====================================================
+       診断完了・送信
+       ===================================================== */
+    async function submitDiagnosis() {
+      if (!answers.q4) return;
+      showScreen('loading');
+
+      var typeNum = calcType();
+      var typeData = TYPES[typeNum];
+      var now = new Date().toLocaleString('ja-JP', { timeZone: 'Asia/Tokyo' });
+
+      var payload = {
+        timestamp: now,
+        displayName: userProfile.displayName,
+        userId: userProfile.userId,
+        q1: QUESTIONS.q1.opts[answers.q1] || answers.q1,
+        q2: QUESTIONS.q2.opts[answers.q2] || answers.q2,
+        q3: QUESTIONS.q3.opts[answers.q3] || answers.q3,
+        q4: QUESTIONS.q4.opts[answers.q4] || answers.q4,
+        resultType: typeData.name,
+        followStatus: '未対応'
+      };
+
+      // GASへ非同期送信（失敗しても結果表示は続行）
+      sendToGAS(payload).catch(function (e) {
+        console.warn('GAS送信エラー（結果表示は継続）:', e);
+      });
+
+      await sleep(2200);
+      renderResult(typeNum, typeData);
+      showScreen('result');
+    }
+
+    /* =====================================================
+       診断ロジック — スコアリング
+       ===================================================== */
+    function calcType() {
+      var totals = [0, 0, 0, 0];
+      ['q1', 'q2', 'q3', 'q4'].forEach(function (q) {
+        var ans = answers[q];
+        if (ans && SCORES[q][ans]) {
+          SCORES[q][ans].forEach(function (v, i) { totals[i] += v; });
+        }
+      });
+      var max = Math.max.apply(null, totals);
+      return totals.indexOf(max) + 1; // 1-indexed
+    }
+
+    /* =====================================================
+       結果画面レンダリング
+       ===================================================== */
+    function renderResult(typeNum, typeData) {
+      document.getElementById('res-icon').textContent = typeData.icon;
+      document.getElementById('res-name').textContent = typeData.name;
+      document.getElementById('res-desc').textContent = typeData.desc;
+      document.getElementById('res-suggest').textContent = typeData.suggest;
+
+      // 回答まとめ
+      var html = '<div class="summary-ttl">📝 あなたの回答まとめ</div>';
+      ['q1', 'q2', 'q3', 'q4'].forEach(function (q, i) {
+        var qd = QUESTIONS[q];
+        var av = qd.opts[answers[q]] || answers[q] || '—';
+        html += '<div class="summary-row">'
+          + '<span class="summary-q">Q' + (i + 1) + '&#160;' + qd.label + '</span>'
+          + '<span class="summary-a">' + escHtml(av) + '</span>'
+          + '</div>';
+      });
+      document.getElementById('res-summary').innerHTML = html;
+    }
+
+    /* =====================================================
+       GAS 送信
+       ===================================================== */
+    function sendToGAS(payload) {
+      if (!CONFIG.GAS_URL || CONFIG.GAS_URL === 'YOUR_GAS_WEBAPP_URL_HERE') {
+        console.log('[DEV] GAS URL未設定 — 送信スキップ。payload:', payload);
+        return Promise.resolve();
+      }
+      return fetch(CONFIG.GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    /* =====================================================
+       ユーティリティ
+       ===================================================== */
+    function sleep(ms) {
+      return new Promise(function (resolve) { setTimeout(resolve, ms); });
+    }
+    function escHtml(s) {
+      return String(s)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* =====================================================
+       起動
+       ===================================================== */
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+</body>
+
+</html>
