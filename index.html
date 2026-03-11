@@ -1039,6 +1039,12 @@
         <!-- JS で生成 -->
       </div>
 
+      <div class="result-actions" style="margin-top: 24px;">
+        <button class="btn-primary" onclick="closeLiff()" style="background: linear-gradient(135deg, var(--text-mid) 0%, var(--text) 100%); box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+          診断を終了して閉じる
+        </button>
+      </div>
+
       <p class="result-footer-note">担当スタッフよりLINEにてご連絡いたします。<br>プライバシーポリシーに基づき、適切に管理いたします。</p>
     </div>
   </div>
@@ -1239,6 +1245,9 @@
         followStatus: '未対応'
       };
 
+      // LINEトーク画面へ結果を送信
+      sendLineMessageToChat(typeData, answers);
+
       // GASへ非同期送信（失敗しても結果表示は続行）
       sendToGAS(payload).catch(function (e) {
         console.warn('GAS送信エラー（結果表示は継続）:', e);
@@ -1290,7 +1299,7 @@
        GAS 送信
        ===================================================== */
     function sendToGAS(payload) {
-      if (!CONFIG.GAS_URL || CONFIG.GAS_URL === 'YOUR_GAS_WEBAPP_URL_HERE') {
+      if (!CONFIG.GAS_URL || CONFIG.GAS_URL === 'https://script.google.com/macros/s/AKfycbxB8f_BJDUfNvCRRJlaIuTZdTH6W6MTiAhfCCSIq2XqqvFjpG6MInH5vz9y3COjAozMdA/exec') {
         console.log('[DEV] GAS URL未設定 — 送信スキップ。payload:', payload);
         return Promise.resolve();
       }
@@ -1300,6 +1309,46 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
+    }
+
+    /* =====================================================
+       LINEトークルームへメッセージ送信
+       ===================================================== */
+    async function sendLineMessageToChat(typeData, ans) {
+      if (!liff.isInClient()) {
+        console.log('[DEV] Not in LINE client - skip sendMessages');
+        return;
+      }
+      try {
+        var text = "🧬 診断結果が出ました！\n\n"
+          + typeData.icon + " 私は\n"
+          + "【" + typeData.name + "】\n"
+          + "でした！\n\n"
+          + "📝 回答内容\n"
+          + "Q1: " + (QUESTIONS.q1.opts[ans.q1] || "") + "\n"
+          + "Q2: " + (QUESTIONS.q2.opts[ans.q2] || "") + "\n"
+          + "Q3: " + (QUESTIONS.q3.opts[ans.q3] || "") + "\n"
+          + "Q4: " + (QUESTIONS.q4.opts[ans.q4] || "");
+
+        await liff.sendMessages([{
+          type: 'text',
+          text: text
+        }]);
+        console.log('Message sent successfully');
+      } catch (e) {
+        console.error('sendMessages error:', e);
+      }
+    }
+
+    /* =====================================================
+       LIFFを閉じる
+       ===================================================== */
+    function closeLiff() {
+      if (liff.isInClient()) {
+        liff.closeWindow();
+      } else {
+        alert('ブラウザ版のため閉じることができません。タブを閉じてください。');
+      }
     }
 
     /* =====================================================
