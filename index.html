@@ -1235,15 +1235,17 @@
 
       var payload = {
         timestamp: now,
-        displayName: userProfile.displayName,
-        userId: userProfile.userId,
-        q1: QUESTIONS.q1.opts[answers.q1] || answers.q1,
-        q2: QUESTIONS.q2.opts[answers.q2] || answers.q2,
-        q3: QUESTIONS.q3.opts[answers.q3] || answers.q3,
-        q4: QUESTIONS.q4.opts[answers.q4] || answers.q4,
-        resultType: typeData.name,
+        displayName: userProfile.displayName || 'ゲスト',
+        userId: userProfile.userId || 'unknown',
+        q1: QUESTIONS.q1.opts[answers.q1] || answers.q1 || '',
+        q2: QUESTIONS.q2.opts[answers.q2] || answers.q2 || '',
+        q3: QUESTIONS.q3.opts[answers.q3] || answers.q3 || '',
+        q4: QUESTIONS.q4.opts[answers.q4] || answers.q4 || '',
+        resultType: typeData.name || '',
         followStatus: '未対応'
       };
+
+      console.log('[DEBUG] payload:', payload);
 
       // LINEトーク画面へ結果を送信
       sendLineMessageToChat(typeData, answers);
@@ -1299,14 +1301,14 @@
        GAS 送信
        ===================================================== */
     function sendToGAS(payload) {
-      if (!CONFIG.GAS_URL || CONFIG.GAS_URL === 'https://script.google.com/macros/s/AKfycbxB8f_BJDUfNvCRRJlaIuTZdTH6W6MTiAhfCCSIq2XqqvFjpG6MInH5vz9y3COjAozMdA/exec') {
+      if (!CONFIG.GAS_URL || CONFIG.GAS_URL.includes('AKfycbxB8f_BJDUfNvCRRJlaIuTZdTH6W6MTiAhfCCSIq2XqqvFjpG6MInH5vz9y3COjAozMdA/exec-placeholder')) { // プレースホルダーでないことを確認
         console.log('[DEV] GAS URL未設定 — 送信スキップ。payload:', payload);
         return Promise.resolve();
       }
       return fetch(CONFIG.GAS_URL, {
         method: 'POST',
         mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' }, // CORS制約回避のため text/plain に変更
         body: JSON.stringify(payload)
       });
     }
