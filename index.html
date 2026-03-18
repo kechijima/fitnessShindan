@@ -797,26 +797,26 @@
       }
 
       // 2. Save to GS (POST)
-      const payload = {
-        userId: userId,
-        userName: userName,
-        q1: userAnswers['q1'].text,
-        q2: userAnswers['q2'].text,
-        q3: userAnswers['q3'].text,
-        q4: userAnswers['q4'].text,
-        resultType: typeData.title
-      };
+      // const payload = {
+      //   userId: userId,
+      //   userName: userName,
+      //   q1: userAnswers['q1'].text,
+      //   q2: userAnswers['q2'].text,
+      //   q3: userAnswers['q3'].text,
+      //   q4: userAnswers['q4'].text,
+      //   resultType: typeData.title
+      // };
 
-      try {
-        await fetch(GAS_URL, {
-          method: 'POST',
-          mode: 'no-cors', // standard for web apps unless CORS is set
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-      } catch (e) {
-        console.error('GAS Save failed', e);
-      }
+      // try {
+      //   await fetch(GAS_URL, {
+      //     method: 'POST',
+      //     mode: 'no-cors', // standard for web apps unless CORS is set
+      //     headers: { 'Content-Type': 'application/json' },
+      //     body: JSON.stringify(payload)
+      //   });
+      // } catch (e) {
+      //   console.error('GAS Save failed', e);
+      // }
     }
 
     // --- Init ---
