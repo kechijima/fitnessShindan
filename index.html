@@ -11,8 +11,9 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Jost:wght@500;700;900&display=swap" rel="stylesheet">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Jost:wght@500;700;900&display=swap"
+    rel="stylesheet">
+
   <style>
     /* ===== RESET & BASE ===== */
     *,
@@ -25,13 +26,18 @@
     }
 
     :root {
-      --primary: #FF69B4;        /* HotPink */
+      --primary: #FF69B4;
+      /* HotPink */
       --primary-mid: #FF85C1;
-      --primary-light: #FFB6C1;  /* LightPink */
-      --accent: #FF1493;         /* DeepPink */
-      --bg: #FFF5F7;             /* Very Light Pink Background */
+      --primary-light: #FFB6C1;
+      /* LightPink */
+      --accent: #FF1493;
+      /* DeepPink */
+      --bg: #FFF5F7;
+      /* Very Light Pink Background */
       --bg-card: #FFFFFF;
-      --text: #4A2B3D;           /* Deep Plum for readability */
+      --text: #4A2B3D;
+      /* Deep Plum for readability */
       --text-mid: #8E6D7E;
       --text-light: #B8A0AC;
       --border: #FFE4E9;
@@ -69,6 +75,7 @@
         opacity: 0;
         transform: translateY(20px) scale(0.98);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -132,8 +139,15 @@
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
+      }
     }
 
     .intro-title {
@@ -189,8 +203,15 @@
       box-shadow: var(--shadow-sm);
     }
 
-    .feature-icon { font-size: 24px; }
-    .feature-text { font-size: 10px; font-weight: 700; color: var(--text-mid); }
+    .feature-icon {
+      font-size: 24px;
+    }
+
+    .feature-text {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-mid);
+    }
 
     .btn-start {
       position: relative;
@@ -285,7 +306,10 @@
       transition: all 0.2s;
     }
 
-    .option-btn:active { transform: scale(0.98); }
+    .option-btn:active {
+      transform: scale(0.98);
+    }
+
     .option-btn.selected {
       border-color: var(--accent);
       background: #FFF0F5;
@@ -316,7 +340,9 @@
       display: none;
     }
 
-    .option-btn.selected .opt-circle::after { display: block; }
+    .option-btn.selected .opt-circle::after {
+      display: block;
+    }
 
     .opt-label {
       font-size: 15px;
@@ -338,8 +364,15 @@
     }
 
     @keyframes pulse {
-      from { transform: scale(1); opacity: 1; }
-      to { transform: scale(1.2); opacity: 0.7; }
+      from {
+        transform: scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: scale(1.2);
+        opacity: 0.7;
+      }
     }
 
     /* ===== RESULT SCREEN ===== */
@@ -439,8 +472,13 @@
     }
 
     /* Utls */
-    .mt-auto { margin-top: auto; }
-    .hidden { display: none !important; }
+    .mt-auto {
+      margin-top: auto;
+    }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -454,7 +492,7 @@
       <div class="intro-main-img">🧘‍♀️</div>
       <h1 class="intro-title"><span>ボディタイプ</span>診断</h1>
       <p class="intro-lead">たった4つの質問で、あなたにぴったりのトレーニングスタイルを導き出します。</p>
-      
+
       <div class="intro-features">
         <div class="feature-item">
           <div class="feature-icon">⏱</div>
@@ -478,7 +516,9 @@
   <div id="screen-q1" class="screen q-screen">
     <div class="q-header">
       <div class="prog-text"><span>診断中</span><span>1 / 4</span></div>
-      <div class="prog-bar-container"><div class="prog-bar-fill" style="width: 25%"></div></div>
+      <div class="prog-bar-container">
+        <div class="prog-bar-fill" style="width: 25%"></div>
+      </div>
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 01</span>
@@ -490,7 +530,9 @@
   <div id="screen-q2" class="screen q-screen">
     <div class="q-header">
       <div class="prog-text"><span>診断中</span><span>2 / 4</span></div>
-      <div class="prog-bar-container"><div class="prog-bar-fill" style="width: 50%"></div></div>
+      <div class="prog-bar-container">
+        <div class="prog-bar-fill" style="width: 50%"></div>
+      </div>
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 02</span>
@@ -502,7 +544,9 @@
   <div id="screen-q3" class="screen q-screen">
     <div class="q-header">
       <div class="prog-text"><span>診断中</span><span>3 / 4</span></div>
-      <div class="prog-bar-container"><div class="prog-bar-fill" style="width: 75%"></div></div>
+      <div class="prog-bar-container">
+        <div class="prog-bar-fill" style="width: 75%"></div>
+      </div>
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 03</span>
@@ -514,7 +558,9 @@
   <div id="screen-q4" class="screen q-screen">
     <div class="q-header">
       <div class="prog-text"><span>診断中</span><span>4 / 4</span></div>
-      <div class="prog-bar-container"><div class="prog-bar-fill" style="width: 100%"></div></div>
+      <div class="prog-bar-container">
+        <div class="prog-bar-fill" style="width: 100%"></div>
+      </div>
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 04</span>
@@ -543,7 +589,7 @@
         <div class="res-card">
           <h3 class="res-card-ttl">✨ あなたへの解説</h3>
           <p id="res-desc" class="res-desc">---</p>
-          
+
           <div class="suggestion-box">
             <div class="sug-ttl">Recommend Plan</div>
             <div id="res-suggestion" class="sug-txt">---</div>
@@ -564,8 +610,8 @@
   <!-- SCRIPTS -->
   <script>
     // --- Configuration ---
-    const LIFF_ID = 'YOUR_LIFF_ID'; // Replace with real ID
-    const GAS_URL = 'https://script.google.com/macros/s/SPREADSHEET_ID/exec'; // Placeholder
+    const LIFF_ID = '2005378903-gpD2szSY'; // Replace with real ID
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbyBGSa2IdksWQQDqZl5VsaQTtEfZ48cCblQLJq3wKmouJlDB6mcAfLgD0of3EZc7KDf/exec'; // Placeholder
 
     const questions = [
       {
@@ -687,7 +733,7 @@
 
     function handleSelect(qId, selectedOpt) {
       userAnswers[qId] = selectedOpt;
-      
+
       // Visual feedback
       const container = document.getElementById('opts-' + qId);
       const btns = container.querySelectorAll('.option-btn');
@@ -725,7 +771,7 @@
       }
 
       const typeData = typeDefinitions[resultType];
-      
+
       // Update UI
       document.getElementById('res-emoji').innerText = typeData.emoji;
       document.getElementById('res-type-title').innerText = `【${typeData.title}】`;
@@ -742,10 +788,10 @@
 
     async function finalizeDiagnosis(type) {
       const typeData = typeDefinitions[type];
-      
+
       // 1. Send LINE Message
       const message = `💪 診断結果が出ました！\n\n🔥 私は\n【${typeData.title}】\nでした！\n\n📝 回答内容\nQ1: ${userAnswers['q1'].text}\nQ2: ${userAnswers['q2'].text}\nQ3: ${userAnswers['q3'].text}\nQ4: ${userAnswers['q4'].text}`;
-      
+
       if (liff.isInClient()) {
         await liff.sendMessages([{ type: 'text', text: message }]);
       }
