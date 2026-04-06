@@ -522,7 +522,7 @@
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 01</span>
-      <h2 class="q-title">フィットネスで一番<br>叶えたいことは？🎯</h2>
+      <h2 class="q-title">今いちばん叶えたいことは何ですか？🎯</h2>
       <div id="opts-q1"></div>
     </div>
   </div>
@@ -536,7 +536,7 @@
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 02</span>
-      <h2 class="q-title">これまでの運動経験は？💪</h2>
+      <h2 class="q-title">これまで運動が続かなかった理由に近いものは？💪</h2>
       <div id="opts-q2"></div>
     </div>
   </div>
@@ -550,7 +550,7 @@
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 03</span>
-      <h2 class="q-title">理想のトレーニング<br>スタイルは？🌟</h2>
+      <h2 class="q-title">あなたに合いそうなのはどれですか？🌟</h2>
       <div id="opts-q3"></div>
     </div>
   </div>
@@ -564,7 +564,7 @@
     </div>
     <div class="q-content">
       <span class="q-num">QUESTION 04</span>
-      <h2 class="q-title">目標達成のイメージ期間は？📅</h2>
+      <h2 class="q-title">理想に近づくために、<br>どのくらいサポートが欲しいですか？📅</h2>
       <div id="opts-q4"></div>
     </div>
   </div>
@@ -616,74 +616,76 @@
     const questions = [
       {
         id: 'q1',
-        title: 'フィットネスで一番叶えたいことは？🎯',
+        title: '今いちばん叶えたいことは何ですか？🎯',
         options: [
-          { text: '体重を落としてスリムになりたい', key: 'A', studio: 'BODY_SHAPE' },
-          { text: '筋肉をつけてボディラインを変えたい', key: 'B', studio: 'BODY_SHAPE' },
-          { text: '疲れにくい体・健康維持をしたい', key: 'C', studio: 'FUNCTIONAL' },
-          { text: '姿勢改善・柔軟性・体の不調を直したい', key: 'D', studio: 'MIND_BODY' }
+          { text: 'A. 体を引き締めたい・痩せたい', key: 'A', scores: { SHORTEST: 2, SUPPORT: 1 } },
+          { text: 'B. 体力をつけたい・運動不足を解消したい', key: 'B', scores: { ENJOY: 2, CONDITIONING: 1 } },
+          { text: 'C. 姿勢改善・肩こりや腰の不調を整えたい', key: 'C', scores: { CONDITIONING: 3 } },
+          { text: 'D. 楽しく動いてストレス発散したい', key: 'D', scores: { ENJOY: 3 } },
+          { text: 'E. 本気で見た目を変えたい', key: 'E', scores: { SHORTEST: 3 } }
         ]
       },
       {
         id: 'q2',
-        title: 'これまでの運動経験は？💪',
+        title: 'これまで運動が続かなかった理由に近いものは？💪',
         options: [
-          { text: '何度かチャレンジしたが続かなかった', key: 'A', score: 1 },
-          { text: '運動は好きだが一人では限界を感じている', key: 'B', score: 1 },
-          { text: '運動はほぼ初めて・経験なし', key: 'C', score: 0 },
-          { text: '体に痛みや不調があり不安', key: 'D', score: 1 }
+          { text: 'A. 何をしたらいいかわからなかった', key: 'A', scores: { SUPPORT: 3 } },
+          { text: 'B. 1人だと甘えてしまった', key: 'B', scores: { SUPPORT: 3 } },
+          { text: 'C. きつすぎて続かなかった', key: 'C', scores: { ENJOY: 2 } },
+          { text: 'D. 時間が合わず通えなかった', key: 'D', scores: { SUPPORT: 2 } },
+          { text: 'E. 効果を感じられずやめてしまった', key: 'E', scores: { SHORTEST: 3 } }
         ]
       },
       {
         id: 'q3',
-        title: '理想のトレーニングスタイルは？🌟',
+        title: 'あなたに合いそうなのはどれですか？🌟',
         options: [
-          { text: '専属トレーナーにマンツーマンで見てほしい', key: 'A', score: 2 },
-          { text: 'みんなと一緒に楽しく体を動かしたい', key: 'B', score: 0 },
-          { text: '自分のペースで集中してやりたい', key: 'C', score: 0 },
-          { text: 'まずは体験してから決めたい', key: 'D', score: 0 }
+          { text: 'A. みんなと一緒の方が楽しく頑張れる', key: 'A', scores: { ENJOY: 3 } },
+          { text: 'B. 自分に合った内容をしっかり見てほしい', key: 'B', scores: { SUPPORT: 2, SHORTEST: 1 } },
+          { text: 'C. 両方気になる', key: 'C', scores: { SUPPORT: 3 } },
+          { text: 'D. まずは気軽に始めたい', key: 'D', scores: { ENJOY: 3 } }
         ]
       },
       {
         id: 'q4',
-        title: '目標達成のイメージ期間は？📅',
+        title: '理想に近づくために、どのくらいサポートが欲しいですか？📅',
         options: [
-          { text: '3ヶ月以内に集中して結果を出したい', key: 'A', score: 1 },
-          { text: '半年〜1年でじっくり変わりたい', key: 'B', score: 0 },
-          { text: '長期的に健康な体を維持したい', key: 'C', score: 0 },
-          { text: '期限は特に決めていない', key: 'D', score: 0 }
+          { text: 'A. まずは気軽に始められればいい', key: 'A', scores: { ENJOY: 3 } },
+          { text: 'B. 時々アドバイスがもらえると安心', key: 'B', scores: { SUPPORT: 3 } },
+          { text: 'C. 自分専用のメニューでしっかり進めたい', key: 'C', scores: { SHORTEST: 2, SUPPORT: 1 } },
+          { text: 'D. 食事や生活習慣も含めて見てほしい', key: 'D', scores: { SHORTEST: 3 } }
         ]
       }
     ];
 
     const typeDefinitions = {
-      'PERSONAL': {
-        title: '本気の変革マンツーマンタイプ',
-        emoji: '💎',
-        summary: 'あなたは本気で体を変えたい・確実に結果を出したいタイプです。',
-        desc: '専属トレーナーが目標・体質・生活リズムに合わせた完全オーダーメイドプログラムで、最短ルートでなりたい自分へと導きます。',
-        suggestion: 'パーソナルトレーニングで、専属トレーナーによる完全個別サポート'
+      'ENJOY': {
+        title: 'エンジョイ習慣化タイプ',
+        emoji: '🎈',
+        summary: '仲間と一緒に楽しく、マイペースに運動を続けたいあなた。',
+        desc: '無理のない範囲で、まずは体を動かす楽しさを感じることが大切です。コミュニティやゲーム感覚のプログラムで、自然と続く習慣化を目指しましょう。',
+        suggestion: 'グループフィットネスやレクリエーション要素のある軽運動プログラム'
       },
-      'BODY_SHAPE': {
-        title: 'ボディシェイプ集中タイプ',
-        emoji: '🔥',
-        summary: 'ダイエット・引き締めに強い意志を持つあなたに最適です。',
-        desc: '集中的にボディラインを変えるカリキュラムが最適です。グループで高め合いながら、目標のスタイルを手に入れましょう。',
-        suggestion: 'ボディシェイプカリキュラムで、引き締めと脂肪燃焼に特化したトレーニング'
+      'SUPPORT': {
+        title: 'サポート活用タイプ',
+        emoji: '🤝',
+        summary: 'プロのアドバイスやサポートを受けながら、着実に進みたいあなた。',
+        desc: '一人では不安だったり、何をすべきか迷ってしまう方に最適です。適度な距離感でプロのサポートを受け、正しいフォームや知識を身に付けましょう。',
+        suggestion: 'セミパーソナルやカウンセリング付きのトレーニングプラン'
       },
-      'FUNCTIONAL': {
-        title: 'アクティブヘルスタイプ',
-        emoji: '🏃',
-        summary: '疲れにくく機能的な体づくりを目指すあなたに最適です。',
-        desc: '日常動作の改善にアプローチするファンクショナルトレーニングが最適です。体力・代謝・パフォーマンスを底上げします。',
-        suggestion: 'ファンクショナルトレーニングカリキュラムで、体の根本的な機能を強化'
+      'SHORTEST': {
+        title: '最短結果タイプ',
+        emoji: '⚡',
+        summary: '強い意志を持ち、最短ルートで理想の姿を手に入れたいあなた。',
+        desc: '結果を最優先するあなたには、科学的根拠に基づいた高効率なトレーニングが最適です。食事管理も含め、妥協のないメニューで目標を達成しましょう。',
+        suggestion: '短期集中型のパーソナルトレーニングプログラム'
       },
-      'MIND_BODY': {
-        title: 'ボディ＆マインドタイプ',
+      'CONDITIONING': {
+        title: 'コンディショニング改善タイプ',
         emoji: '🧘',
-        summary: '姿勢・柔軟性・体の不調改善を求めるあなたに最適です。',
-        desc: 'インナーマッスルと呼吸を整えるヨガ＆ピラティスが最適です。心と体のバランスを整え、美しい姿勢と内側からの健康を実現します。',
-        suggestion: 'ヨガ＆ピラティスカリキュラムで、姿勢と柔軟性を根本から改善'
+        summary: '体の不調を整え、日常の質を根本から高めたいあなた。',
+        desc: '単なる運動だけでなく、姿勢改善や疲労回復、柔軟性向上に重点を置くことが大切です。体の「整え方」を学び、快適な毎日を実現しましょう。',
+        suggestion: '姿勢改善ピラティスやストレッチ重視の整えトレーニング'
       }
     };
 
@@ -758,17 +760,27 @@
       nextScreen('q4', 'loading');
 
       // Score calc
-      let totalScore = 0;
-      totalScore += userAnswers['q2'].score || 0;
-      totalScore += userAnswers['q3'].score || 0;
-      totalScore += userAnswers['q4'].score || 0;
+      let scores = { ENJOY: 0, SUPPORT: 0, SHORTEST: 0, CONDITIONING: 0 };
+      
+      Object.keys(userAnswers).forEach(qId => {
+        const option = userAnswers[qId];
+        if (option.scores) {
+          Object.keys(option.scores).forEach(type => {
+            scores[type] += option.scores[type];
+          });
+        }
+      });
 
-      let resultType = '';
-      if (totalScore >= 3) {
-        resultType = 'PERSONAL';
-      } else {
-        resultType = userAnswers['q1'].studio;
-      }
+      // Find strongest matches
+      let resultType = 'ENJOY'; // fallback
+      let maxScore = -1;
+      
+      Object.keys(scores).forEach(type => {
+        if (scores[type] > maxScore) {
+          maxScore = scores[type];
+          resultType = type;
+        }
+      });
 
       const typeData = typeDefinitions[resultType];
 
